@@ -8,7 +8,7 @@ async function getItems() {
 
  // Répartition des données de l'API dans le DOM
  async function fillSection() {
-    let result = await getItems ()
+    let result = await getItems()
     .then(function (resultApi){
         const items = resultApi;
         console.table(items);
@@ -37,7 +37,7 @@ async function getItems() {
 
             // Insertion de la description "p"
             let productDescription = document.createElement("p");
-            productArticle.appendChild(productDescription);
+            productItem.appendChild(productDescription);
             productDescription.classList.add("productName");
             productDescription.innerHTML = resultApi[item].description;
         }
