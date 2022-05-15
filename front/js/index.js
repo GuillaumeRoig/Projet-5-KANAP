@@ -11,13 +11,12 @@ async function getItems() {
     let result = await getItems()
     .then(function (resultApi){
         const items = resultApi;
-        console.table(items);
         for (let item in items) {
 
             // Insertion de l'élément "a"
             let productLink = document.createElement("a");
-            document.querySelector(".items").appendChild(productLink);
             productLink.href = `product.html?id=${resultApi[item]._id}`;
+            document.querySelector(".items").appendChild(productLink);
 
             // Insertion de l'élément "article"
             let productItem = document.createElement("article");
@@ -25,20 +24,20 @@ async function getItems() {
 
             // Insertion de l'image
             let productImg = document.createElement("img");
-            productItem.appendChild(productImg);
             productImg.src = resultApi[item].imageUrl;
             productImg.alt = resultApi[item].altTxt;
+            productItem.appendChild(productImg);
 
             // Insertion du titre "h3"
             let productName = document.createElement("h3");
-            productItem.appendChild(productName);
             productName.classList.add("productName");
+            productItem.appendChild(productName);
             productName.innerHTML = resultApi[item].name;
 
             // Insertion de la description "p"
             let productDescription = document.createElement("p");
-            productItem.appendChild(productDescription);
             productDescription.classList.add("productName");
+            productItem.appendChild(productDescription);
             productDescription.innerHTML = resultApi[item].description;
         }
     })
