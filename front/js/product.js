@@ -17,12 +17,9 @@ function getItem() {
     })
 
     // Répartition des données de l'API dans le DOM
-    .then(async function (resultApi) {
-        item = await resultApi;
-        console.table(item);
-        if (item){
-            getPost(item);
-        }
+    .then(function (resultApi) {
+        console.table(resultApi);
+        getPost(resultApi);
     })
     .catch((error) => {
         console.log("Erreur de la requête API");
@@ -30,6 +27,9 @@ function getItem() {
 }
 
 function getPost(item){
+    if (!item) {
+        return;
+    }
 
     // Insertion de l'image
     let productImg = document.createElement("img");
@@ -76,7 +76,7 @@ function addToCart(item) {
 
     //Récupération des options de l'article à ajouter au panier
     let productOptions = {
-        idProduit: idProduct,
+        idProduit: item._id,
         productColor: colorChoice,
         productQuantity: Number(quantityChoice),
         productName: item.name,
