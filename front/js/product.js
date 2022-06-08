@@ -3,13 +3,13 @@
 
 let str = window.location.href;
 let url = new URL(str);
-let idCouch = URLSearchParams.get("id");
+let idCouch = url.searchParams.get("id");
 console.log(idCouch);
 
 // Récupération des informations des produits dans l'API
 
 async function getCouchDataList() {
-    let couchDataList = await fetch("http://localhost:3000/api/products" + idCouch);
+    let couchDataList = await fetch(`http://localhost:3000/api/products/${idCouch}`);
     return await couchDataList.json();
 }
 
