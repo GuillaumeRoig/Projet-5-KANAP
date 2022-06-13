@@ -8,16 +8,16 @@ console.log(idCouch);
 
 // Récupération des informations des produits dans l'API
 
-async function getCouchDataList() {
-    let couchDataList = await fetch(`http://localhost:3000/api/products/${idCouch}`);
-    return await couchDataList.json();
+async function getCouchData() {
+    let couchData = await fetch(`http://localhost:3000/api/products/${idCouch}`);
+    return await couchData.json();
 }
 
 // A partir des éléments de mon API, je vais créer le contenu des pages pour mes différents canapés. (Img, titre, prix...)
 
-async function pageContent() {
-    let couchDataList = await getCouchDataList();
-    couchDataList.forEach(couch => {
+function pageContent() {
+    let couchData = getCouchData();
+    couchData.for(couch => {
 
 // Ajout de l'image
 
@@ -51,6 +51,5 @@ for (let colors of couch.colors){
     document.querySelector("#colors").appendChild(couchColors);
 }
 })
-}
-
 pageContent();
+}
