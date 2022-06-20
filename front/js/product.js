@@ -15,39 +15,112 @@ async function getCouchData() {
 
 // A partir des éléments de mon API, je vais créer le contenu des pages pour mes différents canapés. (Img, titre, prix...)
 
-function pageContent() {
-  let couchData = getCouchData();
-  couchData((couch) => {
-    // Ajout de l'image
+async function pageContent() {
+  let couchData = await getCouchData();
 
-    let couchImage = document.createElement("img");
-    couchImage.src = couch.imageUrl;
-    couchImage.alt = couch.altTxt;
-    document.querySelector("#item__img").appendChild(couchImage);
+  // Ajout de l'image
 
-    // Création du titre "h1"
+  let couchImage = document.createElement("img");
+  couchImage.src = couchData.imageUrl;
+  couchImage.alt = couchData.altTxt;
+  document.querySelector("#item__img").appendChild(couchImage);
 
-    let couchTitle = document.getElementById("title");
-    couchTitle.innerHTML = couch.name;
+  // Création du titre "h1"
 
-    // Ajout du prix
+  let couchTitle = document.getElementById("title");
+  couchTitle.innerHTML = couchData.name;
 
-    let couchPrice = document.getElementById("price");
-    couchPrice.innerHTML = couch.price;
+  // Ajout du prix
 
-    // Création de la description
+  let couchPrice = document.getElementById("price");
+  couchPrice.innerHTML = couchData.price;
 
-    let couchDescription = document.getElementById("description");
-    couchDescription.innerHTML = couch.description;
+  // Création de la description
 
-    // Ajout des options de couleurs
+  let couchDescription = document.getElementById("description");
+  couchDescription.innerHTML = couchData.description;
 
-    for (let colors of couch.colors) {
-      console.table(colors);
-      let couchColors = document.createElement("option");
-      couchColors.value = colors;
-      couchColors.innerHTML = colors;
-      document.querySelector("#colors").appendChild(couchColors);
+  // Ajout des options de couleurs
+
+  for (let colors of couchData.colors) {
+    console.table(colors);
+    let couchColors = document.createElement("option");
+    couchColors.value = colors;
+    couchColors.innerHTML = colors;
+    document.querySelector("#colors").appendChild(couchColors);
+  }
+}
+
+pageContent();
+
+// Bouton du panier
+function addToCart(item) {
+  const btn_addToCart = document.querySelector("#addToCart");
+
+  //Ecouter le panier
+  btn_addToCart.addEventListener("click", (event)=>{
+    if (quantityPicked.value > 0 && quantityPicked.value <=100 && quantityPicked.value != 0){
+
+    //Recupération du choix de la couleur
+    let colorChoice = colorPicked.value;
+
+    //Recupération du choix de la quantité
+    let quantityChoice = quantityPicked.value;
+
+  //Récupération des options de l'article à ajouter au panier
+  let productOptions = {
+  idProduit: item._id,
+  productColor: colorChoice,
+  productQuantity: Number(quantityChoice),
+  productName: item.name,
+  productPrice: item.price,
+  productDescription: item.description,
+  productImg: item.imageUrl,
+  altProductImg: item.altTxt
+  };
+
+  //Initialisation du local storage
+  let productLocalStorage = JSON.parse(localStorage.getItem("produit"));
+
+  //fenêtre pop-up
+  const popupConfirmation =() =>{
+    if(window.confirm(`Votre commande de ${quantityChoice} ${item.name} ${colorChoice} est ajoutée au panier
+    Pour consulter votre panier, cliquez sur OK`)){
+    window.location.href ="cart.html";
     }
+  }
+
+ //Importation dans le local storage
+
+ //Si le panier comporte déjà au moins 1 article
+ if (productLocalStorage) {
+  const resultFind = productLocalStorage.find(
+  (el) => el.idProduit === idProduct && el.productColor === colorChoice);
+
+  //Si le produit commandé est déjà dans le panier
+  if (resultFind) {
+  let newQuantity =
+  parseInt(productOptions.productQuantity) + parseInt(resultFind.productQuantity);
+  resultFind.productQuantity = newQuantity;
+  localStorage.setItem("produit", JSON.stringify(productLocalStorage));
+  console.table(productLocalStorage);
+  popupConfirmation();
+  }
+  //Si le produit commandé n'est pas dans le panier
+  else {
+  productLocalStorage.push(productOptions);
+  localStorage.setItem("produit", JSON.stringify(productLocalStorage));
+  console.table(productLocalStorage);
+  popupConfirmation();
+    }
+  }
+  //Si le panier est vide
+   else {
+  productLocalStorage =[];
+  productLocalStorage.push(productOptions);
+  localStorage.setItem("produit", JSON.stringify(productLocalStorage));
+  console.table(productLocalStorage);
+  popupConfirmation();
+  }}
   });
 }
