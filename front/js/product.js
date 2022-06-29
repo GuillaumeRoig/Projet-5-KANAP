@@ -49,16 +49,21 @@ async function pageContent() {
     couchColors.innerHTML = colors;
     document.querySelector("#colors").appendChild(couchColors);
   }
+  attachAddToCartEventToButton(couchData);
 }
 
 pageContent();
 
 // Bouton du panier
-function addToCart(item) {
+function attachAddToCartEventToButton(item) {
   const btn_addToCart = document.querySelector("#addToCart");
+  console.log(item);
   
   //Ecouter le panier
   btn_addToCart.addEventListener("click", (event)=>{
+    console.log(event);
+    const quantityPicked = document.querySelector ('#quantity');
+    const colorPicked = document.querySelector ('#colors');
     if (quantityPicked.value > 0 && quantityPicked.value <=100 && quantityPicked.value != 0){
       
       //Recupération du choix de la couleur
@@ -69,7 +74,7 @@ function addToCart(item) {
       
       //Récupération des options de l'article à ajouter au panier
       let productOptions = {
-        idProduit: item._id,
+        idProduct: item._id,
         productColor: colorChoice,
         productQuantity: Number(quantityChoice),
         productName: item.name,
@@ -78,9 +83,7 @@ function addToCart(item) {
         productImg: item.imageUrl,
         altProductImg: item.altTxt
       };
-      
-      //Initialisation du local storage
-      let productLocalStorage = JSON.parse(localStorage.getItem("produit"));
+      console.log(productOptions);
       
       //fenêtre pop-up
       const popupConfirmation =() =>{
@@ -93,9 +96,17 @@ function addToCart(item) {
       //Importation dans le local storage
       
       //Si le panier comporte déjà au moins 1 article
+
+       //Initialisation du local storage
+       let productLocalStorage = JSON.parse(localStorage.getItem("produit"));
+
       if (productLocalStorage) {
+        // [
+        //   { idPoduct: 12345, productColor: 'bleu' },
+        //   { idPoduct: 456789, productColor: 'rouge' }
+        // ]
         const resultFind = productLocalStorage.find(
-          (el) => el.idProduit === idProduct && el.productColor === colorChoice);
+          (el) => el.idProduct === productOptions.id && el.productColor === colorChoice);
           
           //Si le produit commandé est déjà dans le panier
           if (resultFind) {
@@ -121,6 +132,7 @@ function addToCart(item) {
           localStorage.setItem("produit", JSON.stringify(productLocalStorage));
           console.table(productLocalStorage);
           popupConfirmation();
-        }}
-      });
-    }
+        }
+      }
+    });
+  }
