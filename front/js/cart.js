@@ -139,6 +139,7 @@ function getTotals(){
     
     for (let i = 0; i < myLength; ++i) {
         totalQuantity += couchQuantity[i].valueAsNumber;
+        
     }
     
     let productTotalQuantity = document.getElementById('totalQuantity');
@@ -156,6 +157,28 @@ function getTotals(){
 }
 getTotals();
 
+// Modification de la quantité d'un produit
+function modifyingQuantity() {
+    let modifyingQty = document.querySelectorAll(".itemQuantity");
+    
+    for (let k = 0; k < modifyingQty.length; k++){
+        modifyingQty[k].addEventListener("change" , (event) => {
+            event.preventDefault();
+            
+            let modifyingElement = productLocalStorage[k].productQuantity;
+            let modifyingValue = modifyingQty[k].valueAsNumber;
+            
+            const resultFind = productLocalStorage.find((el) => el.modifyingValue !== modifyingElement);
+            
+            resultFind.productQuantity = modifyingValue;
+            productLocalStorage[k].productQuantity = resultFind.productQuantity;
+            
+            localStorage.setItem("product", JSON.stringify(productLocalStorage));
+            location.reload();
+        })
+    }
+}
+modifyingQuantity();
 
 
 
