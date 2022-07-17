@@ -1,5 +1,5 @@
 //Initialisation du local storage
-let productLocalStorage = JSON.parse(localStorage.getItem("produit"));
+let productLocalStorage = JSON.parse(localStorage.getItem("product"));
 console.table(productLocalStorage);
 const positionEmptyCart = document.querySelector("#cart__items");
 
@@ -87,7 +87,7 @@ function getCart(){
             let deleteProduct = document.createElement("p");
             deleteProduct.className = "deleteItem";
             deleteProduct.innerHTML = "Supprimer";
-            attachRemoveEventToButton(deleteProduct);
+            attachRemoveEventToButton(deleteProduct, product.idProduct, product.productColor);
             productItemContentSettingsDelete.appendChild(deleteProduct);
         })
     }
@@ -96,40 +96,65 @@ getCart();
 
 // Attacher l'évènement au bouton supprimer
 
-function attachRemoveEventToButton(_deleteProduct){
+function attachRemoveEventToButton(_deleteProduct, _idProduct, _productColor) {
     console.log(_deleteProduct);
-    const couchDelete = document.querySelectorAll(".cart__item .deleteItem");
     
-    couchDelete.forEach((couchDelete) => {
-        couchDelete.addEventListener("click", () => {
-            let cart = JSON.parse(localStorage.getItem("panierRéservé"));
-            console.log(couchDelete);
-            for (let i = 0, c = cart.length; i < c; i++)
-            if (
-                cart[i]._id === couchDelete.dataset.id &&
-                cart[i].couleur === couchDelete.dataset.couleur
-                ) {
+    // couchDelete.forEach((couchDelete) => {
+    _deleteProduct.addEventListener("click", () => {
+        
+        let cart = JSON.parse(localStorage.getItem("product"));
+        console.log(cart);
+        
+        // const tableau = [ "string1", "string2" ];
+        // tableau.forEach( (tata, toto) => {
+        //     console.log("element du tableau => ", tata)
+        //     console.log("index du tableau => ", toto)
+        // } )
+
+
+        cart.forEach((element, i) => {
+            console.log(element)
+            if (element.idProduct === _idProduct &&
+                element.productColor === _productColor)
+                {
                     const num = [i];
-                    let newCart = JSON.parse(localStorage.getItem("panierRéservé"));
-                    newCart.splice(num, 1);
-                    if (newCart && newCart.length == 0) {
-                        document.querySelector("#totalQuantity").innerHTML = "0";
-                        document.querySelector("#totalPrice").innerHTML = "0";
-                        document.querySelector("h1").innerHTML =
-                        "Vous n'avez pas d'article dans votre panier";
-                    }
-                    localStorage.panierRéservé = JSON.stringify(newCart);
-                    totalProduct();
-                    return location.reload();
+                    cart.splice(num, 1);
+                    localStorage.setItem("product", JSON.stringify(cart));
+                    location.reload();
                 }
-            }
-            );
-        }
-        );
+                
+
+        })
+    });
 }
 
+// Récupérer le prix total des canapés ainsi que le total des quantités 
 
-
+function getTotals(){
+    
+    // Total des quantités
+    let couchQuantity = document.getElementsByClassName('itemQuantity');
+    let myLength = couchQuantity.length,
+    totalQuantity = 0;
+    
+    for (let i = 0; i < myLength; ++i) {
+        totalQuantity += couchQuantity[i].valueAsNumber;
+    }
+    
+    let productTotalQuantity = document.getElementById('totalQuantity');
+    productTotalQuantity.innerHTML = totalQuantity;
+    
+    // Prix total    
+    totalPrice = 0;
+    
+    for (let i = 0; i < myLength; ++i) {
+        totalPrice += (couchQuantity[i].valueAsNumber * productLocalStorage[i].productPrice);
+    }
+    
+    let productTotalPrice = document.getElementById('totalPrice');
+    productTotalPrice.innerHTML = totalPrice;
+}
+getTotals();
 
 
 

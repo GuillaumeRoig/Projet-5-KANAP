@@ -98,7 +98,7 @@ function attachAddToCartEventToButton(item) {
       //Si le panier comporte déjà au moins 1 article
 
        //Initialisation du local storage
-       let productLocalStorage = JSON.parse(localStorage.getItem("produit"));
+       let productLocalStorage = JSON.parse(localStorage.getItem("product"));
 
       if (productLocalStorage) {
         // [
@@ -113,14 +113,14 @@ function attachAddToCartEventToButton(item) {
             let newQuantity =
             parseInt(productOptions.productQuantity) + parseInt(resultFind.productQuantity);
             resultFind.productQuantity = newQuantity;
-            localStorage.setItem("produit", JSON.stringify(productLocalStorage));
+            localStorage.setItem("product", JSON.stringify(productLocalStorage));
             console.table(productLocalStorage);
             popupConfirmation();
           }
           //Si le produit commandé n'est pas dans le panier
           else {
             productLocalStorage.push(productOptions);
-            localStorage.setItem("produit", JSON.stringify(productLocalStorage));
+            localStorage.setItem("product", JSON.stringify(productLocalStorage));
             console.table(productLocalStorage);
             popupConfirmation();
           }
@@ -129,7 +129,7 @@ function attachAddToCartEventToButton(item) {
         else {
           productLocalStorage =[];
           productLocalStorage.push(productOptions);
-          localStorage.setItem("produit", JSON.stringify(productLocalStorage));
+          localStorage.setItem("product", JSON.stringify(productLocalStorage));
           console.table(productLocalStorage);
           popupConfirmation();
         }
