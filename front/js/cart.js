@@ -5,7 +5,7 @@ const positionEmptyCart = document.querySelector("#cart__items");
 
 // Si le panier est vide
 function getCart(){
-    if (productLocalStorage === null || productLocalStorage == 0) {
+    if (productLocalStorage === null || productLocalStorage === 0) {
         const emptyCart = `<p>Votre panier est vide</p>`;
         positionEmptyCart.innerHTML = emptyCart;
     } else {
@@ -159,7 +159,7 @@ getTotals();
 
 // Modification de la quantité d'un produit
 function modifyingQuantity() {
-    let modifyingQty = document.querySelectorAll(".itemQuantity");
+    // let modifyingQty = document.querySelectorAll(".itemQuantity");
     
     for (let k = 0; k < modifyingQty.length; k++){
         modifyingQty[k].addEventListener("change" , (event) => {
@@ -266,6 +266,48 @@ function getForm() {
     };
 }
 getForm();
+
+
+//Envoi des informations client au localstorage
+function postForm(){
+    const btn_order = document.getElementById("order");
+    
+    btn_order.addEventListener("click", (event)=>{
+        
+        let inputName = document.getElementById('firstName');
+        let inputLastName = document.getElementById('lastName');
+        let inputAdress = document.getElementById('address');
+        let inputCity = document.getElementById('city');
+        let inputMail = document.getElementById('email');
+        
+        let idProducts = [];
+        for (let i = 0; i<productLocalStorage.length;i++) {
+            idProducts.push(productLocalStorage[i].idProduct);
+        }
+        console.log(idProducts);
+        
+        const order = {
+            contact : {
+                firstName: inputName.value,
+                lastName: inputLastName.value,
+                address: inputAdress.value,
+                city: inputCity.value,
+                email: inputMail.value,
+            },
+            products: idProducts,
+        } 
+        
+        const options = {
+            method: 'POST',
+            body: JSON.stringify(order),
+            headers: {
+                'Accept': 'application/json', 
+                "Content-Type": "application/json" 
+            },
+        };
+    })
+}
+postForm();
 
 
 
