@@ -106,7 +106,7 @@ function attachAddToCartEventToButton(item) {
         //   { idPoduct: 456789, productColor: 'rouge' }
         // ]
         const resultFind = productLocalStorage.find(
-          (el) => el.idProduct === productOptions.id && el.productColor === colorChoice);
+          (el) => el.idProduct === productOptions.idProduct && el.productColor === colorChoice);
           
           //Si le produit commandé est déjà dans le panier
           if (resultFind) {

@@ -4,7 +4,7 @@ console.table(productLocalStorage);
 const positionEmptyCart = document.querySelector("#cart__items");
 
 // Si le panier est vide
-function getCart(){
+async function getCart(){
     if (productLocalStorage === null || productLocalStorage === 0) {
         const emptyCart = `<p>Votre panier est vide</p>`;
         positionEmptyCart.innerHTML = emptyCart;
@@ -76,6 +76,7 @@ function getCart(){
             productQuantity.setAttribute("min", "1");
             productQuantity.setAttribute("max", "100");
             productQuantity.setAttribute("name", "itemQuantity");
+            attachModifyingQuantityToButton(productQuantity, product.idProduct, product.productColor);
             productItemContentSettingsQuantity.appendChild(productQuantity);
             
             // Insertion de l'élément "div"
@@ -158,30 +159,37 @@ function getTotals(){
 getTotals();
 
 // Modification de la quantité d'un produit
-function modifyingQuantity() {
+function attachModifyingQuantityToButton(_productQuantity, _idProduct, _productColor) {
     // let modifyingQty = document.querySelectorAll(".itemQuantity");
     
-    for (let k = 0; k < modifyingQty.length; k++){
-        modifyingQty[k].addEventListener("change" , (event) => {
+    // for (let k = 0; k < modifyingQty.length; k++){
+        // modifyingQty[k].addEventListener("change" , (event) => {
+        _productQuantity.addEventListener("change" , (event) => {
             event.preventDefault();
             
-            let modifyingElement = productLocalStorage[k].productQuantity;
-            let modifyingValue = modifyingQty[k].valueAsNumber;
+            // let modifyingElement = productLocalStorage[k].productQuantity;
+            let modifyingQuantity = _productQuantity.value;
+
+            const cartCopy = JSON.parse(localStorage.getItem("product")); 
+            cartCopy.forEach((canap) => {
+                if(canap.idProduct === _idProduct && canap.productColor === _productColor) {
+                    canap.productQuantity = modifyingQuantity;
+                }
+            })
             
-            const resultFind = productLocalStorage.find((el) => el.modifyingValue !== modifyingElement);
+            // const resultFind = productLocalStorage.find((el) => el.modifyingValue !== modifyingElement);
             
-            resultFind.productQuantity = modifyingValue;
-            productLocalStorage[k].productQuantity = resultFind.productQuantity;
+            // resultFind.productQuantity = modifyingValue;
+            // productLocalStorage[k].productQuantity = resultFind.productQuantity;
             
-            localStorage.setItem("product", JSON.stringify(productLocalStorage));
+            localStorage.setItem("product", JSON.stringify(cartCopy));
             location.reload();
         })
-    }
+    // }
 }
-modifyingQuantity();
 
 //Instauration formulaire
-function getForm() {
+async function getForm() {
     let form = document.querySelector(".cart__order__form");
     
     //Création des expressions régulières
@@ -269,11 +277,14 @@ getForm();
 
 
 //Envoi des informations client au localstorage
-function postForm(){
+async function postForm(){
     const btn_order = document.getElementById("order");
     
-    btn_order.addEventListener("click", (event)=>{
+    btn_order.addEventListener("click", async(event)=>{
+        event.preventDefault();
         
+console.log("ABCDE");
+
         let inputName = document.getElementById('firstName');
         let inputLastName = document.getElementById('lastName');
         let inputAdress = document.getElementById('address');
@@ -305,6 +316,11 @@ function postForm(){
                 "Content-Type": "application/json" 
             },
         };
+
+        // fetch 
+        const orderResponse = await fetch('http://localhost:3000/api/products/order', options);
+        console.log(orderResponse);
+        window.location.href = "/confirmation.html/{{orderId}}";
     })
 }
 postForm();
