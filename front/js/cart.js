@@ -283,8 +283,8 @@ async function postForm(){
     btn_order.addEventListener("click", async(event)=>{
         event.preventDefault();
         
-console.log("ABCDE");
-
+        console.log("ABCDE");
+        
         let inputName = document.getElementById('firstName');
         let inputLastName = document.getElementById('lastName');
         let inputAdress = document.getElementById('address');
@@ -316,11 +316,12 @@ console.log("ABCDE");
                 "Content-Type": "application/json" 
             },
         };
-
+        
         // fetch 
         const orderResponse = await fetch('http://localhost:3000/api/products/order', options);
-        console.log(orderResponse);
-        window.location.href = "/confirmation.html/{{orderId}}";
+        console.log(orderResponse);{
+        localStorage.setItem("orderId", data.orderId);
+        window.location.href = "confirmation.html/orderId";}
     })
 }
 postForm();
