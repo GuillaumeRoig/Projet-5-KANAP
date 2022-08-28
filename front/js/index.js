@@ -21,7 +21,6 @@ async function createHtmlElement() {
         let couchRef = document.createElement("a");
         couchRef.href = `./product.html?id=${couch._id}`;
         document.querySelector("#items").appendChild(couchRef);
-        console.log(couch);
 
         let couchArticle = document.createElement("article");
         couchRef.appendChild(couchArticle);

@@ -4,7 +4,6 @@
 let str = window.location.href;
 let url = new URL(str);
 let idCouch = url.searchParams.get("id");
-console.log(idCouch);
 
 // Récupération des informations des produits dans l'API
 
@@ -43,7 +42,6 @@ async function pageContent() {
   // Ajout des options de couleurs
   
   for (let colors of couchData.colors) {
-    console.table(colors);
     let couchColors = document.createElement("option");
     couchColors.value = colors;
     couchColors.innerHTML = colors;
@@ -57,11 +55,9 @@ pageContent();
 // Bouton du panier
 function attachAddToCartEventToButton(item) {
   const btn_addToCart = document.querySelector("#addToCart");
-  console.log(item);
   
   //Ecouter le panier
   btn_addToCart.addEventListener("click", (event)=>{
-    console.log(event);
     const quantityPicked = document.querySelector ('#quantity');
     const colorPicked = document.querySelector ('#colors');
     if (quantityPicked.value > 0 && quantityPicked.value <=100 && quantityPicked.value != 0){
@@ -83,7 +79,6 @@ function attachAddToCartEventToButton(item) {
         productImg: item.imageUrl,
         altProductImg: item.altTxt
       };
-      console.log(productOptions);
       
       //fenêtre pop-up
       const popupConfirmation =() =>{
@@ -114,14 +109,12 @@ function attachAddToCartEventToButton(item) {
             parseInt(productOptions.productQuantity) + parseInt(resultFind.productQuantity);
             resultFind.productQuantity = newQuantity;
             localStorage.setItem("product", JSON.stringify(productLocalStorage));
-            console.table(productLocalStorage);
             popupConfirmation();
           }
           //Si le produit commandé n'est pas dans le panier
           else {
             productLocalStorage.push(productOptions);
             localStorage.setItem("product", JSON.stringify(productLocalStorage));
-            console.table(productLocalStorage);
             popupConfirmation();
           }
         }
@@ -130,7 +123,6 @@ function attachAddToCartEventToButton(item) {
           productLocalStorage =[];
           productLocalStorage.push(productOptions);
           localStorage.setItem("product", JSON.stringify(productLocalStorage));
-          console.table(productLocalStorage);
           popupConfirmation();
         }
       }

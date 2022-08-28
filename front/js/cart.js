@@ -1,6 +1,5 @@
 //Initialisation du local storage
 let productLocalStorage = JSON.parse(localStorage.getItem("product"));
-console.table(productLocalStorage);
 const positionEmptyCart = document.querySelector("#cart__items");
 
 // Si le panier est vide
@@ -10,7 +9,6 @@ async function getCart(){
         positionEmptyCart.innerHTML = emptyCart;
     } else {
         productLocalStorage.forEach(product => {
-            console.log(product);
             // Insertion de l'élément "article"
             let productItem = document.createElement("article");
             productItem.className = "cart__item";
@@ -27,7 +25,6 @@ async function getCart(){
             productImg.src = product.productImg;
             productImg.alt = product.altProductImg;
             productDivImg.appendChild(productImg);
-            console.log(productImg);
             // Insertion de l'élément "div"
             let productItemContent = document.createElement("div");
             productItemContent.className = "cart__item__content";
@@ -98,23 +95,13 @@ getCart();
 // Attacher l'évènement au bouton supprimer
 
 function attachRemoveEventToButton(_deleteProduct, _idProduct, _productColor) {
-    console.log(_deleteProduct);
     
     // couchDelete.forEach((couchDelete) => {
     _deleteProduct.addEventListener("click", () => {
         
         let cart = JSON.parse(localStorage.getItem("product"));
-        console.log(cart);
-        
-        // const tableau = [ "string1", "string2" ];
-        // tableau.forEach( (tata, toto) => {
-        //     console.log("element du tableau => ", tata)
-        //     console.log("index du tableau => ", toto)
-        // } )
-
 
         cart.forEach((element, i) => {
-            console.log(element)
             if (element.idProduct === _idProduct &&
                 element.productColor === _productColor)
                 {
@@ -283,8 +270,6 @@ async function postForm(){
     btn_order.addEventListener("click", async(event)=>{
         event.preventDefault();
         
-        console.log("ABCDE");
-        
         let inputName = document.getElementById('firstName');
         let inputLastName = document.getElementById('lastName');
         let inputAdress = document.getElementById('address');
@@ -295,7 +280,6 @@ async function postForm(){
         for (let i = 0; i<productLocalStorage.length;i++) {
             idProducts.push(productLocalStorage[i].idProduct);
         }
-        console.log(idProducts);
         
         const order = {
             contact : {
@@ -316,17 +300,19 @@ async function postForm(){
                 "Content-Type": "application/json" 
             },
         };
+
+        // {"contact":{"firstName":"guillaume","lastName":"Roig","address":"16 avenue Jean Darrigrand","city":"bayonne","email":"plop@live.fr"},"products":[{"colors":["Black/Yellow","Black/Red"],"_id":"415b7cacb65d43b2b5c1ff70f3393ad1","name":"Kanap Cyllène","price":4499,"imageUrl":"http://localhost:3000/images/kanap02.jpeg","description":"Morbi nec erat aliquam, sagittis urna non, laoreet justo. Etiam sit amet interdum diam, at accumsan lectus.","altTxt":"Photo d'un canapé jaune et noir, quattre places"},{"colors":["Pink","Brown","Yellow","White"],"_id":"a6ec5b49bd164d7fbe10f37b6363f9fb","name":"Kanap orthosie","price":3999,"imageUrl":"http://localhost:3000/images/kanap08.jpeg","description":"Mauris molestie laoreet finibus. Aenean scelerisque convallis lacus at dapibus. Morbi imperdiet enim metus rhoncus.","altTxt":"Photo d'un canapé rose, trois places"},{"colors":["Red","Silver"],"_id":"034707184e8e4eefb46400b5a3774b5f","name":"Kanap Thyoné","price":1999,"imageUrl":"http://localhost:3000/images/kanap07.jpeg","description":"EMauris imperdiet tellus ante, sit amet pretium turpis molestie eu. Vestibulum et egestas eros. Vestibulum non lacus orci.","altTxt":"Photo d'un canapé rouge, deux places"}],"orderId":"84b1eeb0-1805-11ed-b4f7-7f68efe053f0"}
         
         // fetch 
         const orderResponse = await fetch('http://localhost:3000/api/products/order', options);
-        console.log(orderResponse);{
-        localStorage.setItem("orderId", data.orderId);
-        window.location.href = "confirmation.html/orderId";}
+        const data = await orderResponse.json();
+        window.location.href = "confirmation.html?orderId=" + data.orderId;
+
+        // http://localhost:3000/confirmation.html/646854646786268a824za <---- PathParam
+        // http://localhost:3000/confirmation.html?orderId=646854646786268a824za <---- QueryParam
     })
 }
 postForm();
-
-
 
 
 
